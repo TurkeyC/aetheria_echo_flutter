@@ -44,6 +44,7 @@ dependencies:
   audioplayers: ^5.2.1 # 用于播放TTS音频
   record: ^5.0.1      # 用于录制STT音频
   path_provider: ^2.1.1 # 用于获取文件路径
+  flutter_dotenv: ^5.1.0 # 用于加载环境变量
 
 dev_dependencies:
   flutter_test:
@@ -70,6 +71,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - lib/assets/html/
+    - .env
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
