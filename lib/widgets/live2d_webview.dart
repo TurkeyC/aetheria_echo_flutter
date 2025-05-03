@@ -76,7 +76,7 @@ class _Live2dWebViewState extends State<Live2dWebView> {
     });
 
     await controller.runJavaScript(
-      "window.receiveMsgFromFlutter($message)",
+      "window.receiveMsgFromFlutter('$message')",
     );
   }
 }
