@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'widgets/live2d_webview.dart'; // 导入Live2dWebView组件
-import 'services/api_service.dart';   // 如果需要使用API服务
+import 'services/api_service.dart';   // 使用API服务
+import 'services/voice_service.dart'; // 使用语音服务
 
 void main() {
   runApp(const AetheriaEchoApp());
@@ -37,6 +38,9 @@ class _ChatScreenState extends State<ChatScreen> {
 
   // 添加API服务
   final ApiService _apiService = ApiService();
+
+  // 添加语音服务
+  final VoiceService _voiceService = VoiceService();
 
   // 添加Live2D控制器引用
   final GlobalKey<Live2dWebViewState> _live2dKey = GlobalKey();
@@ -147,45 +151,82 @@ class _ChatScreenState extends State<ChatScreen> {
 
     _textController.clear();
 
-    try {
-      // 调用API获取回复
-      final response = await _apiService.sendMessage(message);
+  try {
+    // 显示AI正在思考的状态
+    setState(() {
+      _messages.add(ChatMessage(text: '正在思考...', isUser: false));
+    });
 
-      setState(() {
-        _messages.add(ChatMessage(text: response, isUser: false));
-      });
+    // 调用API获取回复
+    final response = await _apiService.sendMessage(message);
 
-      // 如果模型已加载，则让Live2D模型说话
-      if (_modelLoaded && _live2dKey.currentState != null) {
-        _live2dKey.currentState?.sendMessageToLive2d('speak', response);
-      }
-    } catch (e) {
-      setState(() {
-        _messages.add(ChatMessage(
-          text: '发生错误: $e',
-          isUser: false,
-        ));
-      });
+    // 替换"正在思考"为实际回复
+    setState(() {
+      _messages.removeLast();
+      _messages.add(ChatMessage(text: response, isUser: false));
+    });
+
+    // 添加语音朗读功能
+    await _voiceService.speak(response);
+
+    // 如果模型已加载，则让Live2D模型说话
+    if (_modelLoaded && _live2dKey.currentState != null) {
+      _live2dKey.currentState?.sendMessageToLive2d('speak', response);
     }
+  } catch (e) {
+    // 错误处理
+    setState(() {
+      if (_messages.last.text == '正在思考...') {
+        _messages.removeLast();
+      }
+      _messages.add(ChatMessage(
+        text: '发生错误: $e',
+        isUser: false,
+      ));
+    });
+  }
+}
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeServices();
+  }
+
+  Future<void> _initializeServices() async {
+    // 初始化语音服务
+    await _voiceService.initialize();
   }
 
   void _startListening() {
     setState(() {
       _isListening = true;
     });
-    // 这里添加语音识别逻辑
-    Future.delayed(const Duration(seconds: 2), () {
-      _stopListening();
+
+    _voiceService.listen(
+      onResult: (text) {
+        setState(() {
+          _textController.text = text;
+        });
+      },
+      onDone: () {
+        _stopListening();
+      },
+    );
+  }
+
+  // 替换现有的_stopListening方法
+  void _stopListening() {
+    _voiceService.stopListening();
+    setState(() {
+      _isListening = false;
+      // 如果有输入内容，可以自动提交
+      if (_textController.text.isNotEmpty) {
+        _handleSubmit();
+      }
     });
   }
 
-  void _stopListening() {
-    setState(() {
-      _isListening = false;
-      // 模拟语音输入
-      _textController.text = '这是语音识别的文本';
-    });
-  }
 }
 
 class ChatMessage extends StatelessWidget {
