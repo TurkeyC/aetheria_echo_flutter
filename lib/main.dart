@@ -3,9 +3,11 @@ import 'dart:convert';
 import 'widgets/live2d_webview.dart'; // 导入Live2dWebView组件
 import 'services/api_service.dart';   // 使用API服务
 import 'services/voice_service.dart'; // 使用语音服务
+import 'package:flutter_dotenv/flutter_dotenv.dart'; // 导入 dotenv
 
-void main() {
+Future<void> main() async { // 将 main 函数改为 async
   WidgetsFlutterBinding.ensureInitialized(); // 确保Flutter绑定已初始化
+  await dotenv.load(fileName: ".env"); // 加载 .env 文件
   runApp(const AetheriaEchoApp());
 }
 
