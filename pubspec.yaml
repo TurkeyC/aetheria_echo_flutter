@@ -41,6 +41,9 @@ dependencies:
   flutter_tts: ^3.8.3  # 文字转语音
   speech_to_text: ^6.3.0  # 语音识别
   webview_flutter: ^4.4.2
+  audioplayers: ^5.2.1 # 用于播放TTS音频
+  record: ^5.0.1      # 用于录制STT音频
+  path_provider: ^2.1.1 # 用于获取文件路径
 
 dev_dependencies:
   flutter_test:
