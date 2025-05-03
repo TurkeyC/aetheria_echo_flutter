@@ -43,3 +43,4 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/lib/assets/html/live2d/framework/zip/CubismSdkForWeb-5-r.3/
