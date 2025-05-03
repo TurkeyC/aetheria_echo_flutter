@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aetheria Echo Live2D</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: transparent;
+    }
+
+    #live2d-container {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div id="live2d-container"></div>
+
+  <script>
+    // 接收来自Flutter的消息
+    function receiveMsgFromFlutter(message) {
+      try {
+        const {action, data} = JSON.parse(message);
+
+        switch(action) {
+          case 'speak':
+            // 触发说话动画
+            console.log('Live2D说话:', data);
+            break;
+          case 'expression':
+            // 切换表情
+            console.log('切换表情:', data);
+            break;
+        }
+      } catch (e) {
+        console.error('处理消息错误:', e);
+      }
+    }
+
+    // 向Flutter发送消息
+    function sendMessageToFlutter(message) {
+      if (window.FlutterApp) {
+        window.FlutterApp.postMessage(JSON.stringify(message));
+      }
+    }
+  </script>
+
+  <!-- 这里需要添加加载原始项目Live2D库的脚本 -->
+</body>
+</html>
