@@ -46,9 +46,11 @@ class _ChatScreenState extends State<ChatScreen> {
           // Live2D区域
           Expanded(
             flex: 3,
-            child: Container(
-              color: Colors.black12,
-              child: const Center(child: Text('Live2D 模型区域')),
+            child: Live2dWebView(
+              initialUrl: 'asset:///assets/html/live2d.html',
+              onMessageReceived: (message) {
+                // 处理从Live2D接收的消息
+              },
             ),
           ),
           // 聊天消息区域
