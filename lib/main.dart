@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
 import 'widgets/live2d_webview.dart'; // 导入Live2dWebView组件
 import 'services/api_service.dart';   // 如果需要使用API服务
 
@@ -34,6 +35,13 @@ class _ChatScreenState extends State<ChatScreen> {
   final List<ChatMessage> _messages = [];
   bool _isListening = false;
 
+  // 添加API服务
+  final ApiService _apiService = ApiService();
+
+  // 添加Live2D控制器引用
+  final GlobalKey<Live2dWebViewState> _live2dKey = GlobalKey();
+  bool _modelLoaded = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,14 +51,28 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
       body: Column(
         children: [
-          // Live2D区域
+          // Live2D区域 - 添加key引用
           Expanded(
             flex: 3,
-            child: Live2dWebView(
-              initialUrl: 'asset:///assets/html/live2d.html',
-              onMessageReceived: (message) {
-                // 处理从Live2D接收的消息
-              },
+            child: Stack(
+              children: [
+                Live2dWebView(
+                  key: _live2dKey,
+                  initialUrl: 'asset:///lib/assets/html/live2d.html',  // 本地Web服务或assets路径
+                  onMessageReceived: _handleLive2dMessage,
+                ),
+                if (!_modelLoaded)
+                  const Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        CircularProgressIndicator(),
+                        SizedBox(height: 16),
+                        Text('正在加载Live2D模型...')
+                      ],
+                    ),
+                  )
+              ],
             ),
           ),
           // 聊天消息区域
@@ -97,33 +119,64 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  void _handleSubmit() {
+  // 处理从Live2D接收的消息
+  void _handleLive2dMessage(String message) {
+    try {
+      final data = jsonDecode(message);
+      debugPrint('收到Live2D消息: $data');
+
+      // 处理模型加载完成的消息
+      if (data['action'] == 'modelLoaded' && data['success'] == true) {
+        setState(() {
+          _modelLoaded = true;
+        });
+      }
+    } catch (e) {
+      debugPrint('处理Live2D消息错误: $e');
+    }
+  }
+
+  // 发送消息
+  void _handleSubmit() async {
     if (_textController.text.isEmpty) return;
+    final message = _textController.text;
 
     setState(() {
-      _messages.add(
-        ChatMessage(
-          text: _textController.text,
-          isUser: true,
-        ),
-      );
-      // 模拟回复
-      _messages.add(
-        ChatMessage(
-          text: '这是一个模拟回复。之后你需要接入API获取真实回复。',
-          isUser: false,
-        ),
-      );
+      _messages.add(ChatMessage(text: message, isUser: true));
     });
 
     _textController.clear();
+
+    try {
+      // 调用API获取回复
+      final response = await _apiService.sendMessage(message);
+
+      setState(() {
+        _messages.add(ChatMessage(text: response, isUser: false));
+      });
+
+      // 如果模型已加载，则让Live2D模型说话
+      if (_modelLoaded && _live2dKey.currentState != null) {
+        _live2dKey.currentState?.sendMessageToLive2d('speak', response);
+      }
+    } catch (e) {
+      setState(() {
+        _messages.add(ChatMessage(
+          text: '发生错误: $e',
+          isUser: false,
+        ));
+      });
+    }
   }
 
   void _startListening() {
     setState(() {
       _isListening = true;
     });
-    // 之后添加语音识别逻辑
+    // 这里添加语音识别逻辑
+    Future.delayed(const Duration(seconds: 2), () {
+      _stopListening();
+    });
   }
 
   void _stopListening() {
@@ -132,7 +185,6 @@ class _ChatScreenState extends State<ChatScreen> {
       // 模拟语音输入
       _textController.text = '这是语音识别的文本';
     });
-    // 之后添加语音识别结果处理逻辑
   }
 }
 
