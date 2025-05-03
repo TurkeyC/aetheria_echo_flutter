@@ -45,3 +45,4 @@ app.*.map.json
 /android/app/release
 /lib/assets/html/live2d/framework/zip/CubismSdkForWeb-5-r.3/
 /lib/models/testmodels/
+/lib/models/Hiyori/
