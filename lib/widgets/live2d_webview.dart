@@ -14,10 +14,10 @@ class Live2dWebView extends StatefulWidget {
   });
 
   @override
-  State<Live2dWebView> createState() => _Live2dWebViewState();
+  Live2dWebViewState createState() => Live2dWebViewState();
 }
 
-class _Live2dWebViewState extends State<Live2dWebView> {
+class Live2dWebViewState extends State<Live2dWebView> {
   late final WebViewController controller;
   bool isLoading = true;
 
