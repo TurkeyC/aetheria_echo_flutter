@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'widgets/live2d_webview.dart'; // 导入Live2dWebView组件
+import 'services/api_service.dart';   // 如果需要使用API服务
 
 void main() {
   runApp(const AetheriaEchoApp());
