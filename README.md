@@ -64,17 +64,38 @@ ApiService({this.baseUrl = 'http://localhost:14515'});
 
 ## 项目结构
 
-An application for AI Live2D Chater
+```
+lib/
+├── assets/
+│   ├── html/           # Live2D WebView相关文件
+│   │   └── live2d/     # Live2D模型和框架文件
+│   └── live2d/         # 模型资源目录
+├── services/
+│   ├── api_service.dart    # AI对话API服务
+│   └── voice_service.dart  # 语音服务
+├── widgets/
+│   └── live2d_webview.dart # Live2D WebView组件
+└── main.dart               # 应用入口
+```
 
-## Getting Started
+## 技术架构
 
-This project is a starting point for a Flutter application.
+- **前端框架**: Flutter
+- **Live2D渲染**: WebView + Javascript
+- **语音服务**: flutter_tts + speech_to_text
+- **AI通信**: HTTP API接口
+- **状态管理**: Provider
 
-A few resources to get you started if this is your first Flutter project:
+## 后端服务
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+本应用需要配合后端大模型API使用，后端应该提供以下功能:
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- HTTP接口：`/api/chat`
+- 输入格式：`{"message": "用户消息"}`
+- 输出格式：`{"response": "AI回复"}`
+
+## 常见问题
+
+- **模型无法加载**: 检查模型路径配置和文件完整性
+- **API连接失败**: 确认API服务地址和端口配置正确
+- **语音识别不工作**: 检查应用权限和麦克风设置
