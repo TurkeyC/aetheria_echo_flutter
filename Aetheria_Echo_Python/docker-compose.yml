@@ -1,0 +1,58 @@
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - APP_TYPE=frontend
+    ports:
+      - "14514:80"
+    volumes:
+      - ./frontend:/app/frontend
+    environment:
+      - NODE_ENV=development
+      - HOST=0.0.0.0
+      - PUBLIC_URL=http://localhost:14514
+      - AZURE_SPEECH_KEY=${AZURE_SPEECH_KEY}
+      - AZURE_SPEECH_REGION=${AZURE_SPEECH_REGION}
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+      - OPENAI_API_BASE=${OPENAI_API_BASE}
+    networks:
+      - aetheria-network
+    depends_on:
+      - backend
+    deploy:
+      resources:
+        limits:
+          cpus: '0.90'
+          memory: 400M
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - APP_TYPE=backend
+    ports:
+      - "14515:80"
+    volumes:
+      - ./backend:/app
+    environment:
+      - FLASK_ENV=development
+      - FLASK_APP=app.py
+      - FRONTEND_URL=http://localhost:14514
+      - AZURE_SPEECH_KEY=${AZURE_SPEECH_KEY}
+      - AZURE_SPEECH_REGION=${AZURE_SPEECH_REGION}
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
+      - OPENAI_API_BASE=${OPENAI_API_BASE}
+    networks:
+      - aetheria-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.90'
+          memory: 400M
+
+networks:
+  aetheria-network:
+    driver: bridge

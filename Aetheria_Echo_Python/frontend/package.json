@@ -1,0 +1,24 @@
+{
+  "name": "aetheria-echo-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build --skip-lint",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "core-js": "^3.26.0",
+    "pixi.js": "^6.5.8",
+    "pixi-live2d-display": "^0.4.0",
+    "vue": "^3.2.45"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~5.0.8",
+    "@vue/cli-plugin-eslint": "~5.0.8",
+    "@vue/cli-service": "~5.0.8",
+    "@vue/compiler-sfc": "^3.2.45",
+    "eslint": "^8.28.0",
+    "eslint-plugin-vue": "^9.8.0"
+  }
+}

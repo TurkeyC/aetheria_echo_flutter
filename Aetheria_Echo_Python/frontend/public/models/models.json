@@ -1,0 +1,51 @@
+{
+  "models": [
+    {
+      "id": "haru",
+      "name": "春日",
+      "path": "/models/haru/haru_greeter_t03.model3.json",
+      "thumbnail": "/models/haru/Haru.2048/texture_00.png",
+      "scale": 1.0,
+      "offsetX": 0,
+      "offsetY": 0
+    },
+    {
+      "id": "mao",
+      "name": "猫猫",
+      "path": "/models/mao/mao_pro.model3.json",
+      "thumbnail": "/models/mao/mao_pro.4096/texture_00.png",
+      "scale": 1.2,
+      "offsetX": 0,
+      "offsetY": 0
+    },
+    {
+      "id": "epsilon",
+      "name": "Epsilon",
+      "path": "/models/epsilon/Epsilon_free.model3.json",
+      "thumbnail": "/models/epsilon/Epsilon_free.2048/texture_00.png",
+      "scale": 1.0,
+      "offsetX": 0,
+      "offsetY": 0
+    },
+    {
+      "id": "hibiki",
+      "name": "响",
+      "path": "/models/hibiki/hibiki.model3.json",
+      "thumbnail": "/models/hibiki/hibiki.2048/texture_00.png",
+      "scale": 1.0,
+      "offsetX": 0,
+      "offsetY": 0
+    },
+    {
+      "id": "hiyori",
+      "name": "日和",
+      "path": "/models/hiyori/hiyori_free_t08.model3.json",
+      "thumbnail": "/models/hiyori/hiyori_free_t08.2048/texture_00.png",
+      "scale": 1.0,
+      "offsetX": 0,
+      "offsetY": 0
+    }
+  ],
+  "activeModel": "haru",
+  "defaultModel": "haru"
+}
