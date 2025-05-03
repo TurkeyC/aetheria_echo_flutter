@@ -46,3 +46,5 @@ app.*.map.json
 /lib/assets/html/live2d/framework/zip/CubismSdkForWeb-5-r.3/
 /lib/models/testmodels/
 /lib/models/Hiyori/
+/.env
+/Aetheria_Echo_Python/.env
