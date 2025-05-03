@@ -41,7 +41,6 @@ dependencies:
   flutter_tts: ^3.8.3  # 文字转语音
   speech_to_text: ^6.3.0  # 语音识别
   webview_flutter: ^4.4.2
-  azure_cognitive_services_speech: ^1.2.0  # Azure语音服务SDK
 
 dev_dependencies:
   flutter_test:
